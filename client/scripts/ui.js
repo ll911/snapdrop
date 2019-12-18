@@ -93,11 +93,7 @@ class PeerUI {
     }
 
     _name() {
-        if (this._peer.name.model) {
-            return this._peer.name.os + ' ' + this._peer.name.model;
-        }
-        this._peer.name.os = this._peer.name.os.replace('Mac OS', 'Mac');
-        return this._peer.name.os + ' ' + this._peer.name.browser;
+        return this._peer.name.displayName;
     }
 
     _icon() {
@@ -477,7 +473,12 @@ class Snapdrop {
             const notifications = new Notifications();
             const networkStatusUI = new NetworkStatusUI();
             const webShareTargetUI = new WebShareTargetUI();
-        })
+        });
+
+        // set display name
+        Events.on('displayName', e => {
+            $("displayName").textContent = "[ " + e.detail.message + " ]";
+        });
     }
 }
 
