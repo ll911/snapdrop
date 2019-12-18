@@ -1,4 +1,5 @@
 const parser = require('ua-parser-js');
+const { uniqueNamesGenerator } = require('unique-names-generator');
 
 class SnapdropServer {
 
@@ -17,6 +18,8 @@ class SnapdropServer {
         this._joinRoom(peer);
         peer.socket.on('message', message => this._onMessage(peer, message));
         this._keepAlive(peer);
+	        // send displayName
+        this._send(peer, { type: 'displayName', message: peer.name.displayName });        
     }
 
     _onHeaders(headers, response) {
@@ -187,7 +190,8 @@ class Peer {
             model: ua.device.model,
             os: ua.os.name,
             browser: ua.browser.name,
-            type: ua.device.type
+            type: ua.device.type,
+            displayName: uniqueNamesGenerator({ length: 2 })
         };
     }
 
